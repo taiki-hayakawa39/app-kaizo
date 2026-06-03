@@ -151,16 +151,14 @@ class AssignmentApp(ft.Column):
             options=[ft.dropdown.Option(p) for p in PRIORITY_OPTIONS],
         )
 
-        # --- フィルタータブ ---
-        self.filter_tabs = ft.Tabs(
-            selected_index=0,
-            on_change=lambda e: self._refresh(),
-            tabs=[
-                ft.Tab(label="すべて"),
-                ft.Tab(label="未完了"),
-                ft.Tab(label="完了済み"),
-            ],
-        )
+        # --- フィルターボタン（0:すべて  1:未完了  2:完了済み）---
+        self.filter_index = 0
+        self.filter_btns = [
+            ft.TextButton("すべて",   on_click=lambda e, i=0: self._set_filter(i)),
+            ft.TextButton("未完了",   on_click=lambda e, i=1: self._set_filter(i)),
+            ft.TextButton("完了済み", on_click=lambda e, i=2: self._set_filter(i)),
+        ]
+        self.filter_row = ft.Row(controls=self.filter_btns, spacing=0)
 
         # --- ソートボタン ---
         self.sort_btn = ft.TextButton(
@@ -209,7 +207,7 @@ class AssignmentApp(ft.Column):
             # フィルター＋ソート
             ft.Row(
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
-                controls=[self.filter_tabs, self.sort_btn],
+                controls=[self.filter_row, self.sort_btn],
             ),
 
             # 件数
@@ -277,6 +275,16 @@ class AssignmentApp(ft.Column):
         save_tasks(self.task_data)
         self._refresh()
 
+    def _set_filter(self, index: int):
+        """フィルターインデックスを切り替え、選択中ボタンを強調する"""
+        self.filter_index = index
+        for i, btn in enumerate(self.filter_btns):
+            btn.style = ft.ButtonStyle(
+                color=ft.Colors.WHITE if i == index else ft.Colors.PRIMARY,
+                bgcolor=ft.Colors.PRIMARY if i == index else ft.Colors.TRANSPARENT,
+            )
+        self._refresh()
+
     def _sort_by_deadline(self, e):
         """締切日が近い順に並び替える（締切なしは末尾）"""
         def key(t):
@@ -289,7 +297,7 @@ class AssignmentApp(ft.Column):
 
     def _refresh(self):
         """フィルターに合わせてタスク一覧を再描画する"""
-        idx = self.filter_tabs.selected_index
+        idx = self.filter_index
         # 0:すべて  1:未完了  2:完了済み
         filtered = [
             t for t in self.task_data
