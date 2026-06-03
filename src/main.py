@@ -156,9 +156,9 @@ class AssignmentApp(ft.Column):
             selected_index=0,
             on_change=lambda e: self._refresh(),
             tabs=[
-                ft.Tab(text="すべて"),
-                ft.Tab(text="未完了"),
-                ft.Tab(text="完了済み"),
+                ft.Tab(label="すべて"),
+                ft.Tab(label="未完了"),
+                ft.Tab(label="完了済み"),
             ],
         )
 
