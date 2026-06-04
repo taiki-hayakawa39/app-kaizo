@@ -3,6 +3,10 @@
 大学生向けの課題管理デスクトップアプリです。  
 [Flet](https://flet.dev/) を使って Python で作成しています。
 
+## 🌐 Web公開URL
+
+https://taiki-hayakawa39.github.io/App-kaizo/
+
 ---
 
 ## 主な機能
