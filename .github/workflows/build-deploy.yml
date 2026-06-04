@@ -28,7 +28,7 @@ jobs:
       - name: Build app
         shell: bash
         run: |
-          uv run flet build web src/main.py --yes --verbose --base-url ${GITHUB_REPOSITORY#*/} --route-url-strategy hash
+          uv run flet build web --yes --verbose --module-name src.main --base-url ${GITHUB_REPOSITORY#*/} --route-url-strategy hash
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
